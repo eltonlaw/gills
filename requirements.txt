@@ -3,3 +3,6 @@ jupyter
 scipy
 pandas
 kanren
+requests
+beautifulsoup4
+selenium
