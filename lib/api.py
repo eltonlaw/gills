@@ -1,24 +1,32 @@
 import os
 from datetime import timedelta
 import pandas as pd
+from . import aws_utils
 data = {}
 
 KEYS = [
-    "mlo_weekly_co2.csv",
+   "mlo_weekly_co2.csv",
     # sourced from https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1310039401
     "statcan_leading_cause_of_death.csv"
 ]
 
+BUCKET = "public-data-d0nkrs"
+
+def load_key_from_fp(key, fp):
+    print(f"...Loading {key} at {fp}")
+    if key == "mlo_weekly_co2.csv":
+        data[key] = read_mlo_weekly_co2_csv(fp)
+    elif key == "statcan_leading_cause_of_death.csv":
+        data[key] = pd.read_csv(fp)
+
 def load(path, key, force=False):
     if key not in data or force is True:
         fp = os.path.join(path, key)
-        print(f"Loading {key}...")
-        if key == "mlo_weekly_co2.csv":
-            data[key] = read_mlo_weekly_co2_csv(fp)
-        elif key == "statcan_leading_cause_of_death.csv":
-            data[key] = pd.read_csv(fp)
+        load_key_from_fp(key, fp)
 
 def load_all(path):
+    s3 = aws_utils.init_s3()
+    aws_utils.download_all(s3, BUCKET, KEYS, path)
     for k in KEYS:
         load(path, k, force=True)
 
