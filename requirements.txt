@@ -2,7 +2,7 @@ numpy
 jupyter
 scipy
 pandas
-kanren
 requests
+matplotlib
 beautifulsoup4
 selenium
