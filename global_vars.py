@@ -8,3 +8,4 @@ elif platform == "darwin":
     DEFAULT_DATA_DIR = f"/Users/{user}"
 elif platform == "win32":
     DEFAULT_DATA_DIR = None
+
